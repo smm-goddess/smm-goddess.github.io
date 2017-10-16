@@ -7,7 +7,7 @@
 我们要进行ELF文件的解析工作，首先要了解ELF文件的格式。关于ELF文件格式的介绍，网络上已经有许多成熟的资料，这里借鉴两个非常具有袜跟性的资料来辅助我们进行解析工作：   
 第一是非虫的经典之作：
 
-![ELF Format](../images/elf.png)
+![ELF Format](images/elf.png)
 
 第二是北京大学实验室出的标准版：    
 <http://download.csdn.net/detail/jiangwei0910410003/9204051>
