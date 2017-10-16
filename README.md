@@ -3,8 +3,13 @@
   * 计算机网络
 * 编程语言
   * Java
+    * Snippit
   * Kotlin
+    * Snippit
   * Python
+    * Snippit
+  * Shell
+    * Snippit
 * 软件逆向
   * [ELF格式解析](/python/ELF文件格式解析.md)
 * PS技巧
