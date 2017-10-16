@@ -3,13 +3,13 @@
   * 计算机网络
 * 编程语言
   * Java
-    * Snippit
+    * [Snippets](/java/snippets.md)
   * Kotlin
-    * Snippit
+    * [Snippets](/kotlin/snippets.md)
   * Python
-    * Snippit
+    * [Snippets](/python/snippets.md)
   * Shell
-    * Snippit
+    * [Snippets](/shell/snippets.md)
 * 软件逆向
   * [ELF格式解析](/python/ELF文件格式解析.md)
 * PS技巧
