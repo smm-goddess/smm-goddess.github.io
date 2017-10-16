@@ -26,7 +26,7 @@ Linux下可以使用的读取ELF文件相关工具为readelf，其比较有用�
   * -V = --version-info Display the version sections (if present)
   * -A = --arch-specific Display architecture specific information (if any)
   * -I = --histogram Display histogram of bucket list lengths
-  * -x = --hex-dump=<number|name> Dump the contents of section <number|name> as bytes
-  * -p = --string-dump<number|name> Dump the contents of section <number|name> as strings
+  * -x = --hex-dump=<number\|name> Dump the contents of section <number\|name> as bytes
+  * -p = --string-dump<number\|name> Dump the contents of section <number\|name> as strings
 
 # 解析(Python)
