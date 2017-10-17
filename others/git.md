@@ -93,30 +93,7 @@ git库中由三部分组成
   `git tag –a tagname`<br>
   `git tag –a tagname –m ‘version msg’`
 12. 撤销操作<br>
-
-    1. 撤销未提交的修改(git reset)<br>
-      `git reset [--hard|soft|mixed|merge|keep] [<commit>或HEAD]`
-
-      * --hard：重设（reset） index和working directory，自从`commit`以来在working directory中的任何改变都被丢弃，并把HEAD指向`commit`<br>
-      例如：<br>
-      `git reset --hard HEAD` #将当前修改全部回退到上一次commit提交时的状态。<br>
-      `git reset --hard HEAD^` #回退到前一个提交的版本<br>
-      `git reset --hard HEAD^^` #回退到前两个提交的版本 等同于 git reset --hard HEAD~2<br>
-      `git reset --hard HEAD~1` #回退到前一个提交的版本，数字1代表回退的提交次数。<br>
-      `git reset --hard HEAD~5` #回退到前面的5个版本<br>
-      `git reset --hard commit_id` #回退到指定的版本号状态。
-      * --soft：index和working directory中的内容不作任何改变，仅仅把HEAD指向`commit`<br>
-      例如：回滚最近一次commit<br>
-      `git commit –m “要回退的commit”`<br>
-      `git reset --soft HEAD^ edit`<br>
-      `git commit -a -c ORIG_HEAD`<br>
-      然后使用reset之前那次commit的注释、作者、日期等信息重新提交。注意，当执行`git reset`命令时，git会把老的HEAD拷贝到文件 .git/ORIG_HEAD 中，在命令中可以使用ORIG_HEAD引用这个commit。commit 命令中 -a 参数的意思是告诉git，自动把所有修改的和删除的文件都放进stage area，未被git跟踪的新建的文件不受影响。commit命令中`-c commit` 或者 `-C <commit`意思是拿已经提交的commit对象中的信息（作者，提交者，注释，时间戳等）提交，那么这条commit命令的意思就非常清晰了，把所有更改的文件加入stage area，并使用上次的提交信息重新提交。
-      - --mixed：仅reset index，但是不reset working directory。这个模式是默认模式，即当不显示告知git reset模式时，会使用mixed模式。<br>
-      例如：回滚add操纵<br>
-      `touch a.log`<br>
-      `git add a.log`<br>
-      `git reset –mixed`
-      * --merge和--keep用的不多  
+    1. 撤销未提交的修改(git reset)
     2. 撤销未提交的修改 : `git checkout filename`
     3. 撤销当前目录所有未提交的修改 : `git checkout`
 
