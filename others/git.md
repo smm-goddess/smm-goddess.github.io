@@ -116,9 +116,9 @@ git库中由三部分组成
       `touch a.log`<br>
       `git add a.log`<br>
       `git reset –mixed`
-      * --merge和--keep用的不多。<br>
-  2. 撤销未提交的修改 : `git checkout filename`<br>
-  3. 撤销当前目录所有未提交的修改 : `git checkout`
+      * --merge和--keep用的不多  
+    2. 撤销未提交的修改 : `git checkout filename`
+    3. 撤销当前目录所有未提交的修改 : `git checkout`
 
 ## 分支管理
 
