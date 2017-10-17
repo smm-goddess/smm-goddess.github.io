@@ -66,6 +66,7 @@ git库中由三部分组成
 6. 忽略项目中的临时文档：<br>
   可以将工作树中你不希望接受git管理的文档信息写到同一目录下的.gitignore文件中<br>
   例如：`echo “not_upload_file_or_dir” > .gitignore`
+
 7. 推送到远程仓库中:<br>
   将远程仓库定义别名 origin :<br>
   `git remote add origin 远程仓库的地址`<br>
@@ -78,20 +79,25 @@ git库中由三部分组成
   `git push origin test:test`<br>
   如果想删除远程的分支呢？类似于上面，如果 : 左边的分支为空，那么将删除:右边的远程的分支<br>
   `git push origin :test`
+
 8. 拉服务器更新拉到本地：<br>
   `git pull` 相当于是从远程获取最新版本并merge到本地<br>
   `git fetch origin master` 相当于是从远程获取最新版本到本地，不会自动merge
+
 9. 查看版本历史<br>
   `git log`<br>
   查看该版本的详细信息<br>
   `git log –p` 显示每一次提交与其父节点提交内容之间快照的差异。<br>
   `git log -p master..origin/master`<br>
   `git show git版本号`
+
 10. 对比不同<br>
   `git diff [filename、HEAD、branchname]` 查看当前文件的不同信息。
+
 11. 添加标签<br>
   `git tag –a tagname`<br>
   `git tag –a tagname –m ‘version msg’`
+
 12. 撤销操作<br>
     1. 撤销未提交的修改(git reset)<br>
     `git reset [--hard|soft|mixed|merge|keep] [<commit>或HEAD]`
@@ -114,7 +120,7 @@ git库中由三部分组成
       `touch a.log`<br>
       `git add a.log`<br>
       `git reset –mixed`
-      * --merge和--keep用的不多  
+      * --merge和--keep用的不多
     2. 撤销未提交的修改<br>
      `git checkout filename`
     3. 撤销当前目录所有未提交的修改<br>
@@ -134,14 +140,12 @@ git库中由三部分组成
   `git checkout 要切换分支名`
 
 4. 分支合并的分支
-
   1. 合并develop分支到master分支名称<br>
     切换到master分支<br>
     `git checkout master`<br>
     运行合并命令 `git merge develop` 该过程git会自动做合并操作，如果遇到冲突，可以通过查看冲突代码，合并冲突后提交解决冲突。
-  2. 合并远程分支到当前分支<br>
-    `git pull . topic/branch`
-
+  2.  合并远程分支到当前分支<br>
+    `git pull . topic/branch` <br>
 5. 删除本地无用的分支<br>
   `git branch –d 需要删除的分支名称` 如果分枝还没有被合并，那么执行这个命令就会将分枝上所做的工作一并删除，git是不允许你这么干的。<br>
   如果你实在想删除的话，那么使用'-D'参数强行删除吧。<br>
