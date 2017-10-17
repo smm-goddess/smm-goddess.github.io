@@ -97,7 +97,7 @@ git库中由三部分组成
   1. 撤销未提交的修改(git reset)<br>
     `git reset [--hard|soft|mixed|merge|keep] [<commit>或HEAD]`
 
-      - --hard：重设（reset） index和working directory，自从`commit`以来在working directory中的任何改变都被丢弃，并把HEAD指向`commit`<br>
+      * --hard：重设（reset） index和working directory，自从`commit`以来在working directory中的任何改变都被丢弃，并把HEAD指向`commit`<br>
       例如：<br>
       `git reset --hard HEAD` #将当前修改全部回退到上一次commit提交时的状态。<br>
       `git reset --hard HEAD^` #回退到前一个提交的版本<br>
@@ -105,7 +105,7 @@ git库中由三部分组成
       `git reset --hard HEAD~1` #回退到前一个提交的版本，数字1代表回退的提交次数。<br>
       `git reset --hard HEAD~5` #回退到前面的5个版本<br>
       `git reset --hard commit_id` #回退到指定的版本号状态。
-      - --soft：index和working directory中的内容不作任何改变，仅仅把HEAD指向`commit`<br>
+      * --soft：index和working directory中的内容不作任何改变，仅仅把HEAD指向`commit`<br>
       例如：回滚最近一次commit<br>
       `git commit –m “要回退的commit”`<br>
       `git reset --soft HEAD^ edit`<br>
@@ -116,7 +116,7 @@ git库中由三部分组成
       `touch a.log`<br>
       `git add a.log`<br>
       `git reset –mixed`
-      - --merge和--keep用的不多。<br>
+      * --merge和--keep用的不多。<br>
 
   2. 撤销未提交的修改 : `git checkout filename`<br>
 
