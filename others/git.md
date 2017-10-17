@@ -140,11 +140,11 @@ git库中由三部分组成
   `git checkout 要切换分支名`
 
 4. 分支合并的分支
-  1. 合并develop分支到master分支名称<br>
+    1. 合并develop分支到master分支名称<br>
     切换到master分支<br>
     `git checkout master`<br>
     运行合并命令 `git merge develop` 该过程git会自动做合并操作，如果遇到冲突，可以通过查看冲突代码，合并冲突后提交解决冲突。
-  2.  合并远程分支到当前分支<br>
+    2.  合并远程分支到当前分支<br>
     `git pull . topic/branch` <br>
 5. 删除本地无用的分支<br>
   `git branch –d 需要删除的分支名称` 如果分枝还没有被合并，那么执行这个命令就会将分枝上所做的工作一并删除，git是不允许你这么干的。<br>
