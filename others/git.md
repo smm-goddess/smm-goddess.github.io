@@ -129,7 +129,6 @@ git库中由三部分组成
 ## 分支管理
 
 1. 创建分支<br>
-  <br>
   `git branch 分支名`<br>
   `git checkout -b newbranch支名` 创建分支并切换到创建的分支上。
 
