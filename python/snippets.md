@@ -1,5 +1,5 @@
 
-* 批量更新库(注意--upgrade后面的空格)
+* 批量更新库(注意--upgrade后面的空格)       
 ``` python
 import pip
 from subprocess import call
