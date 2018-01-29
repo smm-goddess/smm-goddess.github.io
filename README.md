@@ -1,6 +1,7 @@
 * 计算机基础
   * 数据结构
   * 计算机网络
+  * [操作系统](/os/os.md)
 * 编程语言
   * Java
     * [Snippets](/java/snippets.md)
