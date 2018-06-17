@@ -20,7 +20,8 @@ private fun md5Encrypt(byteArray:ByteArray):String{
 }
 
 ## 获取所有安装包信息
-val installedPackages:List<PackageInfo> = Context.packageManager.getInstalledPackages(PackageManager.GET_SIGNATURE)
+val installedPackages:List<PackageInfo> = Context.packageManager
+.getInstalledPackages(PackageManager.GET_SIGNATURE)
 
 ##过滤系统预装应用
 val withoutSystemPackages:List<PackageInfo> = installedPackages.filter{
