@@ -12,7 +12,7 @@
   * Shell
     * [Snippets](/shell/snippets.md)
   * Android
-    * [获取程序签名](/android/get_signature.md)
+    * [获取程序相关信息](/android/get_signature.md)
 * 软件逆向
   * [ELF格式解析](/python/ELF文件格式解析.md)
 * PS技巧
