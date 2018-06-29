@@ -1,3 +1,5 @@
+# You are my goddess, smm
+
 * 计算机基础
   * 数据结构
   * 计算机网络
