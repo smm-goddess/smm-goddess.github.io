@@ -16,6 +16,7 @@
   * Android
     * [获取程序相关信息](/android/get_signature.md)
     * [x86集成houdini](/android/x86集成houdini.md)
+    * [x86集成houdini.tex](/android/x86集成houdini.tex)
     * [模拟器集成xposed](/android/模拟器集成xposed.md)
     * [Snippets](/android/snippets.md)
 * 软件逆向
