@@ -1,0 +1,114 @@
+\documentclass{ctexart}
+    \usepackage{listings}
+    \usepackage{geometry}
+    \geometry{a4paper,scale=0.8}
+    \usepackage{xcolor}
+    \lstset{
+        numbers=left, 
+        numberstyle= \tiny, 
+        showstringspaces=false,%不显示代码字符串中间的空格标记
+        showspaces=false,
+        showtabs=false,  
+        keepspaces=true, %
+        breakindent=22pt, %
+        stringstyle=\ttfamily, % typewriter type for strings
+        basicstyle=\footnotesize, % print whole listing small
+        breaklines=true, %对过长的代码自动换行
+        breakautoindent=true,%
+        breakindent=4em, %
+        keywordstyle= \color{ blue!70},
+        commentstyle= \color{red!50!green!50!blue!50}, 
+        frame=shadowbox, % 阴影效果
+        rulesepcolor= \color{ red!20!green!20!blue!20} ,
+        escapeinside=``, % 英文分号中可写入中文
+        xleftmargin=2em,xrightmargin=2em, aboveskip=1em,
+        framexleftmargin=2em
+    }
+\begin{document}
+\lstset{language=bash}
+\begin{lstlisting}
+#!/usr/bin/evn bash
+
+SYSTEM_MOUNT_POINT=/tmp/houdini/system
+BRIDGE_UNZIP_FOLDER=/tmp/houdini/bridge
+RAMDISK_UNPACK_FOLDER=/tmp/houdini/ramdisk
+
+# TODO adjust system.img file size to make space for houdini files
+mkdir -p ${SYSTEM_MOUNT_POINT}
+mkdir -p ${BRIDGE_UNZIP_FOLDER}
+
+# mount system.img and houdini file
+mount -t ext4 -o loop system.img ${SYSTEM_MOUNT_POINT}
+if [ $? -eq 0 ]; then
+    echo "mount system.img success"
+else
+    echo "mount system.img fail"
+fi
+mount -t squashfs -o loop houdini.sfs ${BRIDGE_UNZIP_FOLDER}
+if [ $? -eq 0 ]; then
+    echo "mount houdini.sfs success"
+else
+    echo "mount houdini.sfs fail"
+    umount ${SYSTEM_MOUNT_POINT}
+fi
+
+# copy houdini files to /system/lib/arm
+mkdir ${SYSTEM_MOUNT_POINT}/lib/arm
+cp -R ${BRIDGE_UNZIP_FOLDER}/* ${SYSTEM_MOUNT_POINT}/lib/arm
+
+# umount houdini file and remove temp files
+umount ${BRIDGE_UNZIP_FOLDER}
+rm -rf ${BRIDGE_UNZIP_FOLDER}
+
+error_exit() {
+    umount ${SYSTEM_MOUNT_POINT}
+    rm -rf ${BRIDGE_UNZIP_FOLDER}
+    exit 1
+}
+
+set_perm() {
+    chown -R $2:$3 $1 || error_exit
+    chmod -R $4 $1 || error_exit
+}
+
+# chown chmod
+set_perm ${SYSTEM_MOUNT_POINT}/lib/arm 0 0 0644
+chmod 0755 ${SYSTEM_MOUNT_POINT}/lib/arm ${SYSTEM_MOUNT_POINT}/lib/arm/nb
+
+# move /system/lib/arm/libhoudini.so -> /system/lib/libhoini.so
+# move /system/lib/arm/houdini -> /system/bin/houdini.so
+mv ${SYSTEM_MOUNT_POINT}/lib/arm/libhoudini.so ${SYSTEM_MOUNT_POINT}/lib/libhoudini.so
+mv ${SYSTEM_MOUNT_POINT}/lib/arm/houdini ${SYSTEM_MOUNT_POINT}/bin/houdini
+
+set_perm ${SYSTEM_MOUNT_POINT}/bin/houdini 0 2000 0755
+
+# modify build.prop
+echo "ro.dalvik.vm.isa.arm=x86" >>${SYSTEM_MOUNT_POINT}/build.prop
+echo "ro.enable.native.bridge.exec=1" >>${SYSTEM_MOUNT_POINT}/build.prop
+sed -i "s/^ro.product.cpu.abi=x86/&\nro.product.cpu.abi2=armeabi-v7a/" ${SYSTEM_MOUNT_POINT}/build.prop
+sed -i "s/^ro.product.cpu.abilist=x86/ro.product.cpu.abilist=x86,armeabi,armeabi-v7a/" ${SYSTEM_MOUNT_POINT}/build.prop
+sed -i "s/^ro.product.cpu.abilist32=x86/ro.product.cpu.abilist32=x86,armeabi,armeabi-v7a/" ${SYSTEM_MOUNT_POINT}/build.prop
+
+# umount system.img
+umount ${SYSTEM_MOUNT_POINT}
+rm -rf ${SYSTEM_MOUNT_POINT}
+
+# modify ramdisk.img
+MAIN_FOLDER=$(pwd)
+mkdir -p ${RAMDISK_UNPACK_FOLDER}
+cp ramdisk.img ${RAMDISK_UNPACK_FOLDER}/ramdisk.img.gz
+cd ${RAMDISK_UNPACK_FOLDER}
+gunzip ramdisk.img.gz
+cpio -i -F ramdisk.img
+sed -i "s/ro.dalvik.vm.native.bridge=0/ro.dalvik.vm.native.bridge=libhoudini.so/" default.prop
+cpio -i -t -F ramdisk.img >list
+cpio -o -H newc -O new_ram.img <list
+gzip new_ram.img
+mv new_ram.img.gz ${MAIN_FOLDER}/ramdisk_new.img
+
+cd ${MAIN_FOLDER}
+rm -rf ${RAMDISK_UNPACK_FOLDER}
+
+echo "Done"
+\end{lstlisting}
+\end{document}\end{document}
