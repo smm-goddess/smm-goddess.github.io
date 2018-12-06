@@ -23,24 +23,7 @@
 * 软件逆向
   * [ELF格式解析](/python/ELF文件格式解析.md)
 * SICP答案
-  * Chapter1
-    * [1.1](/sicp/chapter1/1.1.md)
-    * [1.2](/sicp/chapter1/1.2.md)
-    * [1.3](/sicp/chapter1/1.3.md)
-    * [1.4](/sicp/chapter1/1.4.md)
-    * [1.5](/sicp/chapter1/1.5.md)
-    * [1.6](/sicp/chapter1/1.6.md)
-    * [1.7](/sicp/chapter1/1.7.md)
-    * [1.8](/sicp/chapter1/1.8.md)
-    * [1.9](/sicp/chapter1/1.9.md)
-    * [1.10](/sicp/chapter1/1.10.md)
-    * [1.11](/sicp/chapter1/1.11.md)
-    * [1.12](/sicp/chapter1/1.12.md)
-    * [1.13](/sicp/chapter1/1.13.md)
-    * [1.14](/sicp/chapter1/1.14.md)
-    * [1.15](/sicp/chapter1/1.15.md)
-    * [1.16](/sicp/chapter1/1.16.md)
-    * [1.17](/sicp/chapter1/1.17.md)
+  * 第一章 [1.1](/sicp/chapter1/1.1.md) [1.2](/sicp/chapter1/1.2.md) [1.3](/sicp/chapter1/1.3.md) [1.4](/sicp/chapter1/1.4.md) [1.5](/sicp/chapter1/1.5.md) [1.6](/sicp/chapter1/1.6.md) [1.7](/sicp/chapter1/1.7.md) [1.8](/sicp/chapter1/1.8.md) [1.9](/sicp/chapter1/1.9.md) [1.10](/sicp/chapter1/1.10.md) [1.11](/sicp/chapter1/1.11.md) [1.12](/sicp/chapter1/1.12.md) [1.13](/sicp/chapter1/1.13.md) [1.14](/sicp/chapter1/1.14.md) [1.15](/sicp/chapter1/1.15.md) [1.16](/sicp/chapter1/1.16.md) [1.17](/sicp/chapter1/1.17.md)
 * PS技巧
 * 其它
   * [git使用](/others/git.md)
