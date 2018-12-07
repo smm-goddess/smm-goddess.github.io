@@ -1,5 +1,3 @@
-# ubuntu 将窗口移动到另一个工作区
-
 [Ubuntu 文档](http://people.ubuntu.com/~happyaron/ubuntu-docs/precise-html/shell-workspaces-movewindow.html)
 
 ## 使用鼠标
