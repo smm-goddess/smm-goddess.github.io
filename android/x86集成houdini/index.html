@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="x86模拟器集成houdini支持arm现在很多App都使用JNI来做非常多的工作，相较多于使用Java来讲，使用JNI在安全和效率上来讲都有较大的优势。Android支持的CPU架构多种多样，不同架构的CPU执行指令有所不同，打包而成的JNI库也就不一样，如果将所有架构的JNI库均打包入APK，全使APK非常臃肿，所以厂商提供的APK一般只包含有最流行的arm架构下的JNI库。而在x86的机器上">
+<meta name="keywords" content="Android,模拟器,houdini">
+<meta property="og:type" content="article">
+<meta property="og:title" content="x86模拟器集成houdini">
+<meta property="og:url" content="http://yoursite.com/android/x86集成houdini/index.html">
+<meta property="og:site_name" content="smm-goddess">
+<meta property="og:description" content="x86模拟器集成houdini支持arm现在很多App都使用JNI来做非常多的工作，相较多于使用Java来讲，使用JNI在安全和效率上来讲都有较大的优势。Android支持的CPU架构多种多样，不同架构的CPU执行指令有所不同，打包而成的JNI库也就不一样，如果将所有架构的JNI库均打包入APK，全使APK非常臃肿，所以厂商提供的APK一般只包含有最流行的arm架构下的JNI库。而在x86的机器上">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T18:27:40.416Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="x86模拟器集成houdini">
+<meta name="twitter:description" content="x86模拟器集成houdini支持arm现在很多App都使用JNI来做非常多的工作，相较多于使用Java来讲，使用JNI在安全和效率上来讲都有较大的优势。Android支持的CPU架构多种多样，不同架构的CPU执行指令有所不同，打包而成的JNI库也就不一样，如果将所有架构的JNI库均打包入APK，全使APK非常臃肿，所以厂商提供的APK一般只包含有最流行的arm架构下的JNI库。而在x86的机器上">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/android/x86集成houdini/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>x86模拟器集成houdini | smm-goddess</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smm-goddess</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Neal's Personal Blog</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/android/x86集成houdini/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neal">
+      <meta itemprop="description" content="小笔记">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smm-goddess">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">x86模拟器集成houdini
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-08 01:55:11 / 修改时间：02:27:40" itemprop="dateCreated datePublished" datetime="2018-12-08T01:55:11+08:00">2018-12-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="x86模拟器集成houdini支持arm"><a href="#x86模拟器集成houdini支持arm" class="headerlink" title="x86模拟器集成houdini支持arm"></a>x86模拟器集成houdini支持arm</h1><p>现在很多App都使用JNI来做非常多的工作，相较多于使用Java来讲，使用JNI在安全和效率上来讲都有较大的优势。Android支持的CPU架构多种多样，不同架构的CPU执行指令有所不同，打包而成的JNI库也就不一样，如果将所有架构的JNI库均打包入APK，全使APK非常臃肿，所以厂商提供的APK一般只包含有最流行的arm架构下的JNI库。而在x86的机器上运行arm版本的模拟器，执行效率非常低下，所以现在的问题就是通过一定的技术手段，让x86架构的模拟器能够运行arm版本的JNI库。</p>
+<p>Intel提供了一个用于将arm指令转换为x86指令的ARM Binary Translation库，也就是houdini运行库，它能够执行从arm指令转换为x86指令的二进制翻译。Android系统中也提供了对native代码进行hook的native bridge。官方模拟器没有启用二进制翻译，也没有相应的houdini库，所以需要自行处理模拟器的镜像文件启用并支持native bridge。</p>
+<p>具体的实现步骤示例如下：</p>
+<ol>
+<li>创建一个模拟器，使用Intel Atom x86 Image镜像，Api Level 23(Android 6.0)</li>
+<li>从Google发布的Nexus Player(使用了Atom的CPU)<a href="https://developers.google.com/android/nexus/drivers#fugu" target="_blank" rel="noopener">二进制文件</a>中，拷贝Android 6.0的Native Bridge驱动，或者从<a href="http://www.android-x86.org" target="_blank" rel="noopener">Android-x86 Project</a>下载Android 6.0的<a href="http://dl.android-x86.org/houdini/6_x/houdini.sfs" target="_blank" rel="noopener">Native Bridge驱动</a></li>
+<li><p>修改AVD的system.img和ramdisk.img，开启对Native Bridge的支持。主要修改的地方如下：</p>
+<ul>
+<li><p>system.img</p>
+<ol>
+<li>将native bridge文件夹拷贝到<code>system/lib/arm</code>目录</li>
+<li>libhoudini.so拷贝到<code>/system/lib</code>，houdini拷贝到<code>/system/bin</code></li>
+<li><p>修改build.prop文件</p>
+<pre><code> ro.product.cpu.abi2=armeabi-v7a
+ ro.product.cpu.abilist=x86,armeabi-v7a,armeabi
+ ro.product.cpu.abilist32=x86,armeabi-v7a,armeabi
+ ro.dalvik.vm.isa.arm=x86
+ ro.enable.native.bridge.exec=1
+</code></pre></li>
+</ol>
+</li>
+<li><p>ramdisk.img</p>
+<ol>
+<li><p>修改default.prop</p>
+<pre><code>  ro.dalvik.vm.native.bridge=libhoudini.so
+</code></pre></li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>*注:</strong></p>
+<ul>
+<li><p>模拟器启动时需要加上<code>-selinux permissive</code>或者在模拟器启动后<code>adb root &amp;&amp; adb shell setenforce 0</code>禁用selinux</p>
+</li>
+<li><p>修改system.img的方法</p>
+<ol>
+<li><code>mount -t ext4 -o loop system.img /tmp/houdini/system</code></li>
+<li>直接在目录中进行拷贝、删除文件操作</li>
+<li>对文件进行正确的<code>chown</code>、<code>chmod</code></li>
+<li><code>umount /tmp/houdini/system</code>将修改写入镜像</li>
+<li><p>说明：如果在写入的时候警告<strong>空间不足</strong>，是因为system.img本身大小不足，此时需要对它进行扩容，用到的命令主要有</p>
+<pre><code> 增加镜像至3096M：
+   resize2fs system.img 3096M
+ 把镜像缩至最小：
+   resize2fs -M system.img
+ 显示镜像里真正文件的大小：
+   resize -p system.img
+</code></pre></li>
+</ol>
+</li>
+<li><p>修改ramdisk.img的方法</p>
+<ol>
+<li><code>mv ramdisk.img ramdisk.img.gz</code></li>
+<li><code>gunzip ramdisk.img.gz</code></li>
+<li><code>mkdir ramdisk</code></li>
+<li><code>cd ramdisk</code></li>
+<li><code>cpio -i -F ../ramdisk.img</code></li>
+<li>根据需求，对ramdisk里面的文件进行操作</li>
+<li><code>cpio -i -t -F ../ramdisk.img &gt; list</code>从ramdisk.img里面提取文件名，重定向到list里面，如果在上面的操作中在ramdisk里面进行了文件的添加、删除操作，需要把list里面的相应文件名同样进行添加、删除</li>
+<li><code>cpio -o -H newc -O new_ram.img &lt; list</code></li>
+<li><code>gzip new_ram.img</code></li>
+<li><code>mv new_ram.img.gz ../ramdisk.new.img</code></li>
+</ol>
+</li>
+<li><p>对system.img和ramdisk.img进行操作的脚本，以<code>system-images;android-23;default;x86</code>以及Android-x86的<a href="http://dl.android-x86.org/houdini/6_x/houdini.sfs" target="_blank" rel="noopener">native-bridge</a>为例</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/usr/bin/evn bash</span><br><span class="line"></span><br><span class="line">SYSTEM_MOUNT_POINT=/tmp/houdini/system</span><br><span class="line">BRIDGE_UNZIP_FOLDER=/tmp/houdini/bridge</span><br><span class="line">RAMDISK_UNPACK_FOLDER=/tmp/houdini/ramdisk</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> TODO adjust system.img file size to make space for houdini files</span><br><span class="line">mkdir -p $&#123;SYSTEM_MOUNT_POINT&#125;</span><br><span class="line">mkdir -p $&#123;BRIDGE_UNZIP_FOLDER&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> mount system.img and houdini file</span><br><span class="line">mount -t ext4 -o loop system.img $&#123;SYSTEM_MOUNT_POINT&#125;</span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">    echo "mount system.img success"</span><br><span class="line">else</span><br><span class="line">    echo "mount system.img fail"</span><br><span class="line">fi</span><br><span class="line">mount -t squashfs -o loop houdini.sfs $&#123;BRIDGE_UNZIP_FOLDER&#125;</span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">    echo "mount houdini.sfs success"</span><br><span class="line">else</span><br><span class="line">    echo "mount houdini.sfs fail"</span><br><span class="line">    umount $&#123;SYSTEM_MOUNT_POINT&#125;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> copy houdini files to /system/lib/arm</span><br><span class="line">mkdir $&#123;SYSTEM_MOUNT_POINT&#125;/lib/arm</span><br><span class="line">cp -R $&#123;BRIDGE_UNZIP_FOLDER&#125;/* $&#123;SYSTEM_MOUNT_POINT&#125;/lib/arm</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> umount houdini file and remove temp files</span><br><span class="line">umount $&#123;BRIDGE_UNZIP_FOLDER&#125;</span><br><span class="line">rm -rf $&#123;BRIDGE_UNZIP_FOLDER&#125;</span><br><span class="line"></span><br><span class="line">error_exit() &#123;</span><br><span class="line">    umount $&#123;SYSTEM_MOUNT_POINT&#125;</span><br><span class="line">    rm -rf $&#123;BRIDGE_UNZIP_FOLDER&#125;</span><br><span class="line">    exit 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">set_perm() &#123;</span><br><span class="line">    chown -R $2:$3 $1 || error_exit</span><br><span class="line">    chmod -R $4 $1 || error_exit</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> chown chmod</span><br><span class="line">set_perm $&#123;SYSTEM_MOUNT_POINT&#125;/lib/arm 0 0 0644</span><br><span class="line">chmod 0755 $&#123;SYSTEM_MOUNT_POINT&#125;/lib/arm $&#123;SYSTEM_MOUNT_POINT&#125;/lib/arm/nb</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> move /system/lib/arm/libhoudini.so -&gt; /system/lib/libhoini.so</span><br><span class="line"><span class="meta">#</span> move /system/lib/arm/houdini -&gt; /system/bin/houdini.so</span><br><span class="line">mv $&#123;SYSTEM_MOUNT_POINT&#125;/lib/arm/libhoudini.so $&#123;SYSTEM_MOUNT_POINT&#125;/lib/libhoudini.so</span><br><span class="line">mv $&#123;SYSTEM_MOUNT_POINT&#125;/lib/arm/houdini $&#123;SYSTEM_MOUNT_POINT&#125;/bin/houdini</span><br><span class="line"></span><br><span class="line">set_perm $&#123;SYSTEM_MOUNT_POINT&#125;/bin/houdini 0 2000 0755</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> modify build.prop</span><br><span class="line">echo "ro.dalvik.vm.isa.arm=x86" &gt;&gt;$&#123;SYSTEM_MOUNT_POINT&#125;/build.prop</span><br><span class="line">echo "ro.enable.native.bridge.exec=1" &gt;&gt;$&#123;SYSTEM_MOUNT_POINT&#125;/build.prop</span><br><span class="line">sed -i "s/^ro.product.cpu.abi=x86/&amp;\nro.product.cpu.abi2=armeabi-v7a/" $&#123;SYSTEM_MOUNT_POINT&#125;/build.prop</span><br><span class="line">sed -i "s/^ro.product.cpu.abilist=x86/ro.product.cpu.abilist=x86,armeabi,armeabi-v7a/" $&#123;SYSTEM_MOUNT_POINT&#125;/build.prop</span><br><span class="line">sed -i "s/^ro.product.cpu.abilist32=x86/ro.product.cpu.abilist32=x86,armeabi,armeabi-v7a/" $&#123;SYSTEM_MOUNT_POINT&#125;/build.prop</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> umount system.img</span><br><span class="line">umount $&#123;SYSTEM_MOUNT_POINT&#125;</span><br><span class="line">rm -rf $&#123;SYSTEM_MOUNT_POINT&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> modify ramdisk.img</span><br><span class="line">MAIN_FOLDER=$(pwd)</span><br><span class="line">mkdir -p $&#123;RAMDISK_UNPACK_FOLDER&#125;</span><br><span class="line">cp ramdisk.img $&#123;RAMDISK_UNPACK_FOLDER&#125;/ramdisk.img.gz</span><br><span class="line">cd $&#123;RAMDISK_UNPACK_FOLDER&#125;</span><br><span class="line">gunzip ramdisk.img.gz</span><br><span class="line">cpio -i -F ramdisk.img</span><br><span class="line">sed -i "s/ro.dalvik.vm.native.bridge=0/ro.dalvik.vm.native.bridge=libhoudini.so/" default.prop</span><br><span class="line">cpio -i -t -F ramdisk.img &gt;list</span><br><span class="line">cpio -o -H newc -O new_ram.img &lt;list</span><br><span class="line">gzip new_ram.img</span><br><span class="line">mv new_ram.img.gz $&#123;MAIN_FOLDER&#125;/ramdisk_new.img</span><br><span class="line"></span><br><span class="line">cd $&#123;MAIN_FOLDER&#125;</span><br><span class="line">rm -rf $&#123;RAMDISK_UNPACK_FOLDER&#125;</span><br><span class="line"></span><br><span class="line">echo "Done"</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/模拟器/" rel="tag"># 模拟器</a>
+          
+            <a href="/tags/houdini/" rel="tag"># houdini</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/others/Ubuntu 将窗口移动到另一个工作区/" rel="next" title="Ubuntu移动窗口">
+                <i class="fa fa-chevron-left"></i> Ubuntu移动窗口
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/os/os/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Neal</p>
+              <p class="site-description motion-element" itemprop="description">小笔记</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/smm-goddess" title="GitHub &rarr; https://github.com/smm-goddess" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#x86模拟器集成houdini支持arm"><span class="nav-number">1.</span> <span class="nav-text">x86模拟器集成houdini支持arm</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Neal</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+  
+
+</body>
+</html>
